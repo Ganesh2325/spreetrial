@@ -1,0 +1,185 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                String               @id @default(uuid())
+  name              String
+  email             String               @unique
+  passwordHash      String
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  memberships       GroupMember[]
+  history           MembershipHistory[]
+  paidExpenses      Expense[]            @relation("PaidExpenses")
+  splits            ExpenseParticipant[]
+  settlementsSent   Settlement[]         @relation("SettlementSender")
+  settlementsRecv   Settlement[]         @relation("SettlementReceiver")
+  imports           ExpenseImport[]
+  auditLogs         AuditLog[]
+  notifications     Notification[]
+}
+
+model Group {
+  id                String               @id @default(uuid())
+  name              String
+  description       String?
+  currencyCode      String               @default("INR")
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  members           GroupMember[]
+  history           MembershipHistory[]
+  expenses          Expense[]
+  settlements       Settlement[]
+  imports           ExpenseImport[]
+}
+
+model GroupMember {
+  id        String    @id @default(uuid())
+  groupId   String
+  userId    String
+  role      String    @default("MEMBER") // ADMIN, MEMBER
+  joinedAt  DateTime  @default(now())
+  leftAt    DateTime?
+  active    Boolean   @default(true)
+  group     Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+model MembershipHistory {
+  id        String   @id @default(uuid())
+  groupId   String
+  userId    String
+  action    String   // JOIN, LEAVE
+  timestamp DateTime @default(now())
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Expense {
+  id                String               @id @default(uuid())
+  groupId           String
+  payerId           String
+  description       String
+  originalAmount    Float
+  originalCurrency  String
+  convertedAmount   Float
+  convertedCurrency String               @default("INR")
+  exchangeRate      Float                @default(1.0)
+  expenseDate       DateTime
+  category          String               @default("General")
+  isSettlement      Boolean              @default(false)
+  duplicateReviewed Boolean              @default(false)
+  isAnomaly         Boolean              @default(false)
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+  group             Group                @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  payer             User                 @relation("PaidExpenses", fields: [payerId], references: [id], onDelete: Cascade)
+  participants      ExpenseParticipant[]
+}
+
+model ExpenseParticipant {
+  id              String   @id @default(uuid())
+  expenseId       String
+  userId          String
+  splitAmount     Float
+  sharePercentage Float
+  weight          Float    @default(1.0)
+  splitType       String   @default("EQUAL") // EQUAL, PERCENTAGE, FIXED, WEIGHTED, CUSTOM
+  expense         Expense  @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([expenseId, userId])
+}
+
+model Settlement {
+  id              String   @id @default(uuid())
+  groupId         String
+  payerId         String
+  payeeId         String
+  amount          Float
+  currency        String   @default("INR")
+  exchangeRate    Float    @default(1.0)
+  convertedAmount Float    @default(0.0)
+  date            DateTime @default(now())
+  isReviewed      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  group           Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  payer           User     @relation("SettlementSender", fields: [payerId], references: [id], onDelete: Cascade)
+  payee           User     @relation("SettlementReceiver", fields: [payeeId], references: [id], onDelete: Cascade)
+}
+
+model Currency {
+  id     String  @id @default(uuid())
+  code   String  @unique // INR, USD, EUR
+  symbol String
+  name   String
+  isBase Boolean @default(false)
+}
+
+model ExchangeRate {
+  id           String   @id @default(uuid())
+  fromCurrency String
+  toCurrency   String
+  rate         Float
+  date         DateTime @default(now())
+
+  @@unique([fromCurrency, toCurrency, date])
+}
+
+model ExpenseImport {
+  id           String        @id @default(uuid())
+  groupId      String
+  filename     String
+  status       String        @default("PENDING") // PENDING, APPROVED, REJECTED
+  uploadedById String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  group        Group         @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  uploadedBy   User          @relation(fields: [uploadedById], references: [id], onDelete: Cascade)
+  issues       ImportIssue[]
+}
+
+model ImportIssue {
+  id           String        @id @default(uuid())
+  importId     String
+  rowIndex     Int
+  severity     String        // ERROR, WARNING
+  issueType    String        // e.g. DUPLICATE_EXPENSE, MISSING_PAYER, etc.
+  explanation  String
+  suggestedFix String
+  autoAction   String?
+  manualAction String?
+  status       String        @default("PENDING") // PENDING, RESOLVED, IGNORED
+  importRecord ExpenseImport @relation(fields: [importId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  action     String   // EXPENSE_CREATED, EXPENSE_EDITED, EXPENSE_DELETED, IMPORT_APPROVED, IMPORT_REJECTED, SETTLEMENT_ADDED
+  entityType String   // EXPENSE, SETTLEMENT, IMPORT, MEMBERSHIP
+  entityId   String
+  oldValue   String?  // JSON string
+  newValue   String?  // JSON string
+  timestamp  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

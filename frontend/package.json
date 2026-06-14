@@ -1,0 +1,26 @@
+{
+  "name": "spreetrail-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.0.3",
+    "react": "^19.0.0-rc-62306228-20241105",
+    "react-dom": "^19.0.0-rc-62306228-20241105",
+    "lucide-react": "^0.454.0",
+    "papaparse": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/react": "^19.0.0-rc.1",
+    "@types/react-dom": "^19.0.0-rc.1",
+    "typescript": "^5.4.5",
+    "tailwindcss": "^4.0.0-alpha.31",
+    "@tailwindcss/postcss": "^4.0.0-alpha.31"
+  }
+}

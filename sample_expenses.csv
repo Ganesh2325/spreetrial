@@ -1,0 +1,10 @@
+Date,Description,Amount,Currency,PayerEmail,SplitType,Participants
+2026-05-15,Room Internet Bill,1200,INR,aisha@example.com,EQUAL,
+2026-05-18,Goa Cabin Booking,300,USD,priya@example.com,EQUAL,aisha@example.com,rohan@example.com,priya@example.com,meera@example.com,dev@example.com,sam@example.com
+2026-05-15,Room Internet Bill,1200,INR,aisha@example.com,EQUAL,
+2026-05-16,Room Internet Bill,1200,INR,aisha@example.com,EQUAL,
+2026-05-22,Kitchen Supplies,-500,INR,aisha@example.com,EQUAL,
+2026-99-99,Weekly Groceries,1500,INR,rohan@example.com,EQUAL,
+2026-05-20,Paid Priya back,300,INR,rohan@example.com,EQUAL,priya@example.com
+2026-05-21,Laundry cleaning,600,INR,unknown@example.com,EQUAL,
+2026-02-15,Dev Room Paint,2500,INR,sam@example.com,EQUAL,
