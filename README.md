@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Spreetrail
 
-## Getting Started
+Spreetrail is a full-stack web application designed for group expense tracking and settlement, similar to Splitwise. It features user authentication, group management, expense tracking, a CSV import tool for bulk expenses, and an optimized debt-settlement algorithm to minimize the total number of transactions between users.
 
-First, run the development server:
+## Features
+- **User Authentication**: Secure signup and login functionality.
+- **Group Management**: Create groups and invite members.
+- **Expense Tracking**: Add expenses split equally or unequally among members.
+- **Debt Simplification**: Uses a minimum cash-flow algorithm to optimize how debts are settled.
+- **CSV Data Ingestion**: Import expenses from a CSV file with automatic anomaly detection (duplicate expenses, missing fields, invalid dates).
+- **Audit Logging**: Keeps track of all group activities (expense added, member joined, imports).
 
+## Setup Instructions
+
+### Prerequisites
+- Node.js (v18+)
+- PostgreSQL (v14+)
+- Git
+
+### 1. Clone the repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Ganesh2325/spreetrial.git
+cd spreetrial
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Backend Setup
+```bash
+cd backend
+npm install
+```
+- Create a `.env` file in the `backend` directory based on `.env.example`:
+  ```env
+  PORT=5001
+  DATABASE_URL="postgresql://username:password@localhost:5432/spreetrail"
+  ```
+- Run Prisma migrations:
+  ```bash
+  npx prisma db push
+  ```
+- Start the backend server:
+  ```bash
+  npm run dev
+  ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+```
+- Create a `.env.local` file in the `frontend` directory:
+  ```env
+  NEXT_PUBLIC_API_URL=http://localhost:5001
+  ```
+- Start the frontend development server:
+  ```bash
+  npm run dev
+  ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. Open Application
+Navigate to `http://localhost:3000` in your browser.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## AI Tools Used
+- Google DeepMind Antigravity AI Assistant was utilized throughout the development process for architectural guidance, debugging Docker deployment, writing the min-cash-flow algorithm, and troubleshooting Vercel environment variables.
