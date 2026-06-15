@@ -21,4 +21,5 @@ RUN npm run build
 # EXPOSE 5001
 
 # Start the application
-CMD ["npm", "start"]
+# We run db push before starting the server to ensure the database schema is created/updated
+CMD npx prisma db push --accept-data-loss && npm start
