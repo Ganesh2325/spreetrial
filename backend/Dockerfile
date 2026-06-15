@@ -17,9 +17,8 @@ RUN npx prisma generate
 COPY . .
 RUN npm run build
 
-# Expose port (Render sets PORT automatically, typically we use 5002 locally)
-ENV PORT=5002
-EXPOSE 5002
+# Expose port (Render sets PORT automatically)
+# EXPOSE 5001
 
 # Start the application
 CMD ["npm", "start"]
