@@ -53,7 +53,8 @@ export default function LoginPage() {
       }
     } catch (err) {
       console.error(err);
-      setError('Could not connect to backend server. Make sure it is running on port 5001.');
+      const attemptedUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002';
+      setError(`Could not connect to backend server at ${attemptedUrl}. Check if your Render app is running, and verify Vercel environment variables.`);
     } finally {
       setLoading(false);
     }
