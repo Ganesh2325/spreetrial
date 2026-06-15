@@ -49,7 +49,7 @@ export default function MembersPage({ params }: { params: Promise<{ id: string }
     fetchGroupData(userId);
 
     // Load real users from the database
-    fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/users`)
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/users`)
       .then(r => r.json())
       .then(data => setAllAppUsers(data.users || []))
       .catch(console.error);
@@ -58,7 +58,7 @@ export default function MembersPage({ params }: { params: Promise<{ id: string }
   const fetchGroupData = async (userId: string) => {
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups/${groupId}`, {
         headers: { 'x-user-id': userId }
       });
       if (!res.ok) throw new Error('Failed');
@@ -74,7 +74,7 @@ export default function MembersPage({ params }: { params: Promise<{ id: string }
 
   const handleMemberAction = async (userId: string, action: 'JOIN' | 'LEAVE', date: string) => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/members`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups/${groupId}/members`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

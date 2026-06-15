@@ -36,7 +36,7 @@ export default function CreateGroupPage() {
     setError('');
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

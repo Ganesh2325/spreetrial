@@ -26,7 +26,7 @@ export default function Dashboard() {
 
     const fetchGroups = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups`, {
           headers: {
             'x-user-id': userId
           }
@@ -53,7 +53,7 @@ export default function Dashboard() {
         await Promise.all(
           groups.map(async (g: any) => {
             try {
-              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${g.id}/balances`, {
+              const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups/${g.id}/balances`, {
                 headers: { 'x-user-id': currentUser.id },
               });
               if (res.ok) {

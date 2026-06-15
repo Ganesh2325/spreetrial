@@ -33,13 +33,13 @@ export default function ExpensesPage({ params }: { params: Promise<{ id: string 
     setLoading(true);
     try {
       const headers = { 'x-user-id': userId };
-      const groupRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, { headers });
+      const groupRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups/${groupId}`, { headers });
       if (groupRes.ok) {
         const groupData = await groupRes.json();
         setGroup(groupData.group);
       }
       
-      const expRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/expenses`, { headers });
+      const expRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/groups/${groupId}/expenses`, { headers });
       if (expRes.ok) {
         const expData = await expRes.json();
         setExpenses(expData.expenses || []);

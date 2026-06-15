@@ -37,7 +37,7 @@ export default function SignupPage() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/auth/signup`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001')}/api/auth/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: nameVal, email: emailVal, password: passVal }),
@@ -51,7 +51,7 @@ export default function SignupPage() {
       }
     } catch (err) {
       console.error(err);
-      const attemptedUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002';
+      const attemptedUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
       setError(`Could not connect to backend server at ${attemptedUrl}. Check if your Render app is running, and verify Vercel environment variables.`);
     } finally {
       setLoading(false);
