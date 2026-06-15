@@ -44,13 +44,13 @@ export default function BalancesPage({ params }: { params: Promise<{ id: string 
     setLoading(true);
     try {
       const headers = { 'x-user-id': userId };
-      const groupRes = await fetch(`http://localhost:5002/api/groups/${groupId}`, { headers });
+      const groupRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, { headers });
       if (groupRes.ok) {
         const groupData = await groupRes.json();
         setGroup(groupData.group);
       }
       
-      const balRes = await fetch(`http://localhost:5002/api/groups/${groupId}/balances`, { headers });
+      const balRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/balances`, { headers });
       if (balRes.ok) {
         const balData = await balRes.json();
         setBalances(balData.balances || []);
@@ -67,7 +67,7 @@ export default function BalancesPage({ params }: { params: Promise<{ id: string 
     setExplainUser(userObj);
     setLoadingExplain(true);
     try {
-      const res = await fetch(`http://localhost:5002/api/groups/${groupId}/explain-balance?userId=${memberUserId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/explain-balance?userId=${memberUserId}`);
       const data = await res.json();
       setExplainTrace(data.trace || []);
     } catch (err) {
@@ -79,7 +79,7 @@ export default function BalancesPage({ params }: { params: Promise<{ id: string 
 
   const handleSettleDebt = async (fromUserId: string, toUserId: string, amount: number) => {
     try {
-      const res = await fetch(`http://localhost:5002/api/groups/${groupId}/settlements`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/settlements`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',

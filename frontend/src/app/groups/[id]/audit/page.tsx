@@ -60,7 +60,7 @@ export default function AuditPage({ params }: { params: Promise<{ id: string }> 
     setLoading(true);
     try {
       // Fetch group name
-      const groupRes = await fetch(`http://localhost:5002/api/groups/${groupId}`, {
+      const groupRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, {
         headers: { 'x-user-id': userId },
       });
       if (!groupRes.ok) {
@@ -71,7 +71,7 @@ export default function AuditPage({ params }: { params: Promise<{ id: string }> 
       setGroupName(groupData.group?.name || '');
 
       // Fetch audit logs
-      const logsRes = await fetch(`http://localhost:5002/api/groups/${groupId}/audit-logs`, {
+      const logsRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/audit-logs`, {
         headers: { 'x-user-id': userId },
       });
       if (!logsRes.ok) throw new Error('Failed to fetch audit logs');

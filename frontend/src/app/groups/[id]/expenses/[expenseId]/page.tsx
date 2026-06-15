@@ -31,13 +31,13 @@ export default function ExpenseDetailsPage({ params }: { params: Promise<{ id: s
     setLoading(true);
     try {
       const headers = { 'x-user-id': userId };
-      const groupRes = await fetch(`http://localhost:5002/api/groups/${groupId}`, { headers });
+      const groupRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, { headers });
       if (groupRes.ok) {
         const groupData = await groupRes.json();
         setGroup(groupData.group);
       }
       
-      const expRes = await fetch(`http://localhost:5002/api/groups/${groupId}/expenses`, { headers });
+      const expRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/expenses`, { headers });
       if (expRes.ok) {
         const expData = await expRes.json();
         const found = (expData.expenses || []).find((e: any) => e.id === expenseId);

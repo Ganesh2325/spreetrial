@@ -46,7 +46,7 @@ export default function CreateExpensePage({ params }: { params: Promise<{ id: st
   const fetchGroupData = async (userId: string) => {
     setLoading(true);
     try {
-      const res = await fetch(`http://localhost:5002/api/groups/${groupId}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}`, {
         headers: { 'x-user-id': userId }
       });
       if (res.ok) {
@@ -114,7 +114,7 @@ export default function CreateExpensePage({ params }: { params: Promise<{ id: st
         participants: finalSplits,
       };
 
-      const res = await fetch(`http://localhost:5002/api/groups/${groupId}/expenses`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5002')}/api/groups/${groupId}/expenses`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
