@@ -142,30 +142,42 @@ export default function BalancesPage({ params }: { params: Promise<{ id: string 
             const bal = b.netBalance ?? b.balance ?? 0;
             const userName = b.name || b.user?.name || 'Unknown';
             return (
-            <div key={b.userId} className="p-6 bg-zinc-950/60 border border-green-900 rounded-2xl flex items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold
-                  ${bal > 0 ? 'bg-green-900/40 text-green-400 border border-green-900' : bal < 0 ? 'bg-red-950/40 text-red-400 border border-red-900' : 'bg-zinc-900 text-zinc-400'}
-                `}>
-                  {userName.charAt(0).toUpperCase()}
+            <div key={b.userId} className="p-6 bg-zinc-950/60 border border-green-900 rounded-2xl flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold
+                    ${bal > 0 ? 'bg-green-900/40 text-green-400 border border-green-900' : bal < 0 ? 'bg-red-950/40 text-red-400 border border-red-900' : 'bg-zinc-900 text-zinc-400'}
+                  `}>
+                    {userName.charAt(0).toUpperCase()}
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-lg text-white">{userName}</h4>
+                    <p className="text-xs text-zinc-500">
+                      {bal > 0 ? 'Owed' : bal < 0 ? 'Owes' : 'Settled Up'}
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-lg text-white">{userName}</h4>
-                  <p className="text-xs text-zinc-500">
-                    {bal > 0 ? 'Owed' : bal < 0 ? 'Owes' : 'Settled Up'}
-                  </p>
+                <div className="text-right">
+                  <div className={`text-xl font-bold font-mono ${bal > 0 ? 'text-green-400' : bal < 0 ? 'text-red-400' : 'text-zinc-500'}`}>
+                    {(bal > 0 ? '+' : '') + bal.toFixed(2)}
+                  </div>
+                  <button
+                    onClick={() => handleExplainBalance(b.userId, { name: userName, id: b.userId })}
+                    className="text-xs text-green-500 hover:text-green-400 mt-1 underline cursor-pointer"
+                  >
+                    Explain Trace
+                  </button>
                 </div>
               </div>
-              <div className="text-right">
-                <div className={`text-xl font-bold font-mono ${bal > 0 ? 'text-green-400' : bal < 0 ? 'text-red-400' : 'text-zinc-500'}`}>
-                  {(bal > 0 ? '+' : '') + bal.toFixed(2)}
+              <div className="flex justify-between items-center pt-3 border-t border-green-950/60">
+                <div className="flex flex-col">
+                  <span className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Total Paid</span>
+                  <span className="font-mono text-white text-sm">{(b.paid || 0).toFixed(2)}</span>
                 </div>
-                <button
-                  onClick={() => handleExplainBalance(b.userId, { name: userName, id: b.userId })}
-                  className="text-xs text-green-500 hover:text-green-400 mt-1 underline cursor-pointer"
-                >
-                  Explain Trace
-                </button>
+                <div className="flex flex-col text-right">
+                  <span className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Your Share</span>
+                  <span className="font-mono text-white text-sm">{(b.owed || 0).toFixed(2)}</span>
+                </div>
               </div>
             </div>
             );
@@ -249,10 +261,10 @@ export default function BalancesPage({ params }: { params: Promise<{ id: string 
                       <p className="text-xs text-zinc-500 font-mono mt-1">{new Date(t.date).toLocaleDateString()}</p>
                     </div>
                     <div className="text-right">
-                      <p className={`text-lg font-bold font-mono ${t.effect > 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {t.effect > 0 ? '+' : ''}{t.effect.toFixed(2)}
+                      <p className={`text-lg font-bold font-mono ${t.impact > 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {t.impact > 0 ? '+' : ''}{t.impact.toFixed(2)}
                       </p>
-                      <p className="text-xs text-zinc-500 uppercase">{t.type}</p>
+                      <p className="text-xs text-zinc-500 uppercase">{t.type} {t.splitType ? `• ${t.splitType}` : ''}</p>
                     </div>
                   </div>
                 ))

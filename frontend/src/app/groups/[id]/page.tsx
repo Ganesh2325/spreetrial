@@ -25,6 +25,8 @@ export default function GroupDetails({ params }: { params: Promise<{ id: string 
   const [group, setGroup] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [balances, setBalances] = useState<any[]>([]);
+  const [totalSpent, setTotalSpent] = useState<number>(0);
+  const [expenseCount, setExpenseCount] = useState<number>(0);
 
   useEffect(() => {
     const userId = localStorage.getItem('spreetrail_user_id');
@@ -54,6 +56,15 @@ export default function GroupDetails({ params }: { params: Promise<{ id: string 
       const balRes = await fetch(`http://localhost:5002/api/groups/${groupId}/balances`, { headers });
       const balData = await balRes.json();
       setBalances(balData.balances || []);
+
+      const expRes = await fetch(`http://localhost:5002/api/groups/${groupId}/expenses`, { headers });
+      if (expRes.ok) {
+        const expData = await expRes.json();
+        const exps = expData.expenses || [];
+        setExpenseCount(exps.length);
+        const total = exps.reduce((acc: number, curr: any) => acc + (curr.convertedAmount || curr.originalAmount || 0), 0);
+        setTotalSpent(total);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -136,8 +147,8 @@ export default function GroupDetails({ params }: { params: Promise<{ id: string 
           <div className="glass-card p-6 flex items-center justify-between border-green-900 bg-zinc-950/60 rounded-2xl">
             <div className="space-y-1">
               <span className="text-xs text-zinc-500 uppercase font-semibold tracking-wider">Total Expenses</span>
-              <h2 className="text-2xl font-bold text-white">{group.expenses?.length || 0}</h2>
-              <p className="text-xs text-zinc-500">Recorded transactions</p>
+              <h2 className="text-2xl font-bold text-white">{totalSpent.toFixed(2)} <span className="text-sm text-green-500">{group.currencyCode}</span></h2>
+              <p className="text-xs text-zinc-500">{expenseCount} Recorded transactions</p>
             </div>
             <div className="w-12 h-12 rounded-xl bg-green-950/40 border border-green-900 flex items-center justify-center text-green-400">
               <Receipt size={22} />

@@ -115,7 +115,7 @@ export default function LoginPage() {
               disabled={loading}
               className="btn-primary w-full text-xs font-semibold py-2.5 mt-2 flex justify-center items-center gap-1"
             >
-              {loading ? 'Signing In...' : 'Sign In'} <ArrowRight size={12} />
+              {loading ? 'Signing In...' : 'Sign In'}
             </button>
           </form>
         </div>
@@ -124,7 +124,7 @@ export default function LoginPage() {
         <div className="text-center text-xs">
           <span className="text-zinc-500">Need to create an account? </span>
           <Link href="/" className="text-green-500 hover:text-green-400 font-semibold underline underline-offset-4">
-            Register Here
+            Register
           </Link>
         </div>
 

@@ -272,6 +272,7 @@ export async function explainBalance(groupId: string, userId: string) {
     share: number;
     contribution: number;
     impact: number;
+    splitType?: string;
   }
 
   const items: ExplainItem[] = [];
@@ -291,6 +292,7 @@ export async function explainBalance(groupId: string, userId: string) {
       share,
       contribution,
       impact,
+      splitType: e.participants[0]?.splitType || 'EQUAL',
     });
   });
 

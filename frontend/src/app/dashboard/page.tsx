@@ -152,11 +152,17 @@ export default function Dashboard() {
                 <p className="text-xs text-zinc-500">Add new expenses, view ledger, handle splits.</p>
               </div>
               <button
-                onClick={() => router.push('/groups')}
-                className="mt-4 self-start bg-green-500 hover:bg-green-400 text-black px-3 py-1 rounded-lg text-xs font-bold"
-              >
-                <Plus size={14} className="inline-block mr-1" /> Manage Expenses
-              </button>
+                  onClick={() => {
+                    if (groups.length > 0) {
+                      router.push(`/groups/${groups[0].id}/expenses`);
+                    } else {
+                      setActionError('No groups available. Please create a group first.');
+                    }
+                  }}
+                  className="mt-4 self-start bg-green-500 hover:bg-green-400 text-black px-3 py-1 rounded-lg text-xs font-bold"
+                >
+                  <Plus size={14} className="inline-block mr-1" /> Manage Expenses
+                </button>
             </div>
             <div className="p-6 bg-zinc-950/60 border border-green-900 rounded-2xl flex flex-col justify-between">
               <div>

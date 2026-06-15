@@ -105,7 +105,7 @@ export default function ExpenseDetailsPage({ params }: { params: Promise<{ id: s
                 <Calendar size={14} /> {new Date(expense.expenseDate).toLocaleDateString()}
               </span>
               <span className="bg-green-950/30 text-green-400 border border-green-900 px-3 py-1 rounded-lg font-mono font-bold">
-                {expense.splitType} SPLIT
+                {expense.participants?.[0]?.splitType || 'EQUAL'} SPLIT
               </span>
             </div>
           </div>
@@ -126,11 +126,11 @@ export default function ExpenseDetailsPage({ params }: { params: Promise<{ id: s
             <p className="text-sm font-semibold text-zinc-500 uppercase tracking-wider mb-4">Paid By</p>
             <div className="flex items-center gap-4 p-4 rounded-xl bg-black border border-green-950">
               <div className="w-12 h-12 rounded-lg bg-green-900/40 border border-green-900 flex items-center justify-center font-bold text-green-400 text-lg">
-                {expense.payer?.user?.name?.charAt(0) || '?'}
+                {(expense.payer?.name || expense.payer?.user?.name || '?').charAt(0)}
               </div>
               <div>
-                <h4 className="font-bold text-white text-lg">{expense.payer?.user?.name || 'Unknown'}</h4>
-                <p className="text-xs text-zinc-500">{expense.payer?.user?.email || ''}</p>
+                <h4 className="font-bold text-white text-lg">{expense.payer?.name || expense.payer?.user?.name || 'Unknown'}</h4>
+                <p className="text-xs text-zinc-500">{expense.payer?.email || expense.payer?.user?.email || ''}</p>
               </div>
             </div>
           </div>
@@ -146,20 +146,20 @@ export default function ExpenseDetailsPage({ params }: { params: Promise<{ id: s
               <div key={p.id} className="flex items-center justify-between gap-4 pb-4 border-b border-green-950/50 last:border-0 last:pb-0">
                 <div className="flex items-center gap-3 truncate">
                   <div className="w-8 h-8 rounded-full bg-zinc-900 flex items-center justify-center text-xs font-bold text-zinc-300 shrink-0">
-                    {p.member?.user?.name?.charAt(0) || '?'}
+                    {(p.user?.name || '?').charAt(0)}
                   </div>
                   <span className="text-sm text-zinc-300 font-medium truncate">
-                    {p.member?.user?.name || 'Unknown'}
+                    {p.user?.name || 'Unknown'}
                   </span>
                 </div>
                 <div className="text-right shrink-0">
                   <div className="text-sm font-bold text-white font-mono">
-                    {p.splitValue ? `${p.splitValue.toFixed(2)}` : 'Equal'}
+                    {p.splitAmount !== undefined ? `${p.splitAmount.toFixed(2)}` : 'Equal'}
                   </div>
-                  {expense.splitType === 'PERCENTAGE' && p.splitValue && (
-                    <div className="text-xs text-zinc-500">{p.splitValue}%</div>
+                  {p.splitType === 'PERCENTAGE' && p.sharePercentage !== undefined && (
+                    <div className="text-xs text-zinc-500">{p.sharePercentage}%</div>
                   )}
-                  {expense.splitType !== 'PERCENTAGE' && (
+                  {p.splitType !== 'PERCENTAGE' && (
                     <div className="text-xs text-zinc-500">{expense.originalCurrency}</div>
                   )}
                 </div>

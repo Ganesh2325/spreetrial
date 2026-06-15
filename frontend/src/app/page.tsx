@@ -113,7 +113,7 @@ export default function SignupPage() {
               </label>
               <input
                 type="password"
-                placeholder="Minimum 6 characters"
+                placeholder="Password"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
                 className="glass-input text-xs"
@@ -126,7 +126,7 @@ export default function SignupPage() {
               disabled={loading}
               className="btn-primary w-full text-xs flex justify-center items-center gap-1.5 mt-4"
             >
-              {loading ? 'Processing...' : 'Register Roommate'} <ArrowRight size={12} />
+              {loading ? 'Processing...' : 'Register'}
             </button>
           </form>
         </div>
@@ -134,7 +134,7 @@ export default function SignupPage() {
         <div className="text-center text-xs">
           <span className="text-zinc-500">Already registered? </span>
           <Link href="/login" className="text-green-500 hover:text-green-400 font-semibold underline underline-offset-4">
-            Go to Login
+            Login
           </Link>
         </div>
 

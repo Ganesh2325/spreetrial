@@ -1026,18 +1026,29 @@ app.get('/api/groups/:id/audit-logs', async (req, res) => {
 // ----------------------------------------------------
 // USERS - list all users (for member invite)
 // ----------------------------------------------------
-app.get('/api/users', async (req, res) => {
-  try {
-    const users = await prisma.user.findMany({
-      select: { id: true, name: true, email: true },
-      orderBy: { name: 'asc' },
-    });
-    return res.json({ users });
-  } catch (error) {
-    console.error('Fetch users error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
+  app.get('/api/users', async (req, res) => {
+    try {
+      const users = await prisma.user.findMany({
+        select: { id: true, name: true, email: true },
+        orderBy: { name: 'asc' },
+      });
+      return res.json({ users });
+    } catch (error) {
+      console.error('Fetch users error:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+  // Health check endpoint
+  app.get('/api/health', (req, res) => {
+    res.json({ status: 'ok' });
+  });
+
+  // Global error handling middleware
+  app.use((err, req, res, next) => {
+    console.error('Unhandled error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  });
 
 app.listen(PORT, () => {
   console.log(`Backend server successfully running on port ${PORT}`);

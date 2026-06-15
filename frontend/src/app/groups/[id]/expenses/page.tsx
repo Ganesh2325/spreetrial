@@ -125,7 +125,9 @@ export default function ExpensesPage({ params }: { params: Promise<{ id: string 
                     {exp.originalAmount.toFixed(2)} {exp.originalCurrency}
                   </div>
                   <div className="text-xs text-zinc-500">
-                    Paid by <span className="text-zinc-300 font-semibold">{exp.payer?.user?.name || 'Unknown'}</span>
+                    Paid by <span className="text-zinc-300 font-semibold">{exp.payer?.name || exp.payer?.user?.name || 'Unknown'}</span>
+                    {' • '}
+                    <span className="text-zinc-400 font-medium">{exp.participants?.[0]?.splitType || 'EQUAL'} split</span>
                   </div>
                 </div>
                 <ChevronRight className="text-zinc-700 group-hover:text-green-500 transition-colors" />
