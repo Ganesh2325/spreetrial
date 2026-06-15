@@ -910,7 +910,7 @@ app.post('/api/groups/:id/imports/confirm', async (req, res) => {
           activeMemberIds.forEach(id => parsedParticipants.push({ userId: id }));
         } else {
           const parts = partString.split(',');
-          parts.forEach(p => {
+          parts.forEach((p: string) => {
             const item = p.trim();
             if (item.includes(':')) {
               const [name, val] = item.split(':');
@@ -1045,7 +1045,7 @@ app.get('/api/groups/:id/audit-logs', async (req, res) => {
   });
 
   // Global error handling middleware
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: any, res: any, next: any) => {
     console.error('Unhandled error:', err);
     res.status(500).json({ error: 'Internal server error' });
   });
